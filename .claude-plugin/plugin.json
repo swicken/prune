@@ -1,7 +1,7 @@
 {
-  "name": "ponytail",
-  "version": "4.6.1",
-  "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, scope control, readability over line count.",
+  "name": "prune",
+  "version": "4.7.0",
+  "description": "Keep what earns its place. Readable, scoped, complete, verified engineering.",
   "author": {
     "name": "Scott Wicken",
     "url": "https://github.com/swicken"

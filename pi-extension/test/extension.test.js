@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import ponytailExtension from "../index.js";
+import pruneExtension from "../index.js";
 
 function createPiHarness() {
   const events = new Map();
@@ -27,7 +27,7 @@ function createPiHarness() {
     },
   };
 
-  ponytailExtension(pi);
+  pruneExtension(pi);
   return { events, commands, appendedEntries, sentUserMessages };
 }
 
@@ -41,7 +41,7 @@ function createCommandContext(overrides = {}) {
 }
 
 function withTempConfig(fn) {
-  const tempConfigHome = mkdtempSync(join(tmpdir(), "ponytail-test-"));
+  const tempConfigHome = mkdtempSync(join(tmpdir(), "prune-test-"));
   const previousXdg = process.env.XDG_CONFIG_HOME;
   process.env.XDG_CONFIG_HOME = tempConfigHome;
 
@@ -54,26 +54,26 @@ function withTempConfig(fn) {
     });
 }
 
-test("extension registers Ponytail commands", () => {
+test("extension registers Prune commands", () => {
   const { commands } = createPiHarness();
 
-  assert.deepEqual([...commands.keys()].sort(), ["ponytail", "ponytail-audit", "ponytail-help", "ponytail-review"]);
+  assert.deepEqual([...commands.keys()].sort(), ["prune", "prune-audit", "prune-debt", "prune-help", "prune-review"]);
 });
 
-test("/ponytail updates session mode and injects instructions", async () => withTempConfig(async () => {
+test("/prune updates session mode and injects instructions", async () => withTempConfig(async () => {
   const { commands, events, appendedEntries } = createPiHarness();
   const ctx = createCommandContext();
 
   await events.get("session_start")({ reason: "startup" }, ctx);
-  await commands.get("ponytail").handler("ultra", ctx);
+  await commands.get("prune").handler("ultra", ctx);
 
   assert.deepEqual(appendedEntries.at(-1), {
-    customType: "ponytail-mode",
+    customType: "prune-mode",
     data: { mode: "ultra" },
   });
 
   const result = await events.get("before_agent_start")({ systemPrompt: "BASE" }, ctx);
-  assert.ok(result.systemPrompt.includes("PONYTAIL MODE ACTIVE"));
+  assert.ok(result.systemPrompt.includes("PRUNE MODE ACTIVE"));
   assert.ok(result.systemPrompt.includes("ultra"));
 }));
 
@@ -82,7 +82,7 @@ test("session_start restores latest persisted mode", async () => withTempConfig(
   const ctx = createCommandContext({
     sessionManager: {
       getEntries: () => [
-        { type: "custom", customType: "ponytail-mode", data: { mode: "lite" } },
+        { type: "custom", customType: "prune-mode", data: { mode: "lite" } },
       ],
     },
   });
@@ -97,14 +97,14 @@ test("skill alias commands delegate to Pi skill commands", async () => {
   const { commands, sentUserMessages } = createPiHarness();
   const ctx = createCommandContext();
 
-  await commands.get("ponytail-review").handler("", ctx);
-  await commands.get("ponytail-audit").handler("", ctx);
-  await commands.get("ponytail-help").handler("", ctx);
+  await commands.get("prune-review").handler("", ctx);
+  await commands.get("prune-audit").handler("", ctx);
+  await commands.get("prune-help").handler("", ctx);
 
   assert.deepEqual(sentUserMessages.map((entry) => entry.text), [
-    "/skill:ponytail-review",
-    "/skill:ponytail-audit",
-    "/skill:ponytail-help",
+    "/skill:prune-review",
+    "/skill:prune-audit",
+    "/skill:prune-help",
   ]);
 });
 
@@ -113,7 +113,7 @@ test("normal mode disables persistent instructions", async () => withTempConfig(
   const ctx = createCommandContext();
 
   await events.get("session_start")({ reason: "startup" }, ctx);
-  await commands.get("ponytail").handler("ultra", ctx);
+  await commands.get("prune").handler("ultra", ctx);
   await events.get("input")({ text: "normal mode", source: "interactive" }, ctx);
 
   const disabled = await events.get("before_agent_start")({ systemPrompt: "BASE" }, ctx);

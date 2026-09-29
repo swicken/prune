@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Smoke test for the Gemini CLI adapter. The adapter is a single thin manifest
 // (gemini-extension.json) that reuses the repo's existing files: AGENTS.md for
-// always-on context, commands/*.toml for /ponytail + /ponytail-review, and
+// always-on context, commands/*.toml for /prune + /prune-review, and
 // skills/ for the agent skills. This test fails if the manifest is removed,
 // loses its pinned version, or points contextFileName at a file that no longer
-// carries the load-bearing rules — i.e. if the adapter stops wiring ponytail.
+// carries the load-bearing rules — i.e. if the adapter stops wiring prune.
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -13,16 +13,16 @@ const path = require('path');
 
 const root = path.join(__dirname, '..');
 const MANIFEST = 'gemini-extension.json';
-const EXTENSION_NAME = 'ponytail';
+const EXTENSION_NAME = 'prune';
 // Floating refs are a supply-chain footgun; the manifest version must be pinned.
 const PINNED_SEMVER = /^\d+\.\d+\.\d+$/;
 // Gemini auto-discovers these by directory; the manifest is only useful if they exist.
-const REUSED_COMMANDS = ['commands/ponytail.toml', 'commands/ponytail-review.toml'];
-const REUSED_SKILLS = ['skills/ponytail/SKILL.md'];
+const REUSED_COMMANDS = ['commands/prune.toml', 'commands/prune-review.toml'];
+const REUSED_SKILLS = ['skills/prune/SKILL.md'];
 // Same load-bearing phrases asserted by scripts/sync-rule-copies.js: the file
 // contextFileName points at must actually carry the rules, not just exist.
 const RULE_INVARIANTS = [
-  'lazy senior',
+  'Keep what earns its place',
   'input validation at trust boundaries',
   'naive heuristic',
 ];
@@ -39,7 +39,7 @@ function loadManifest() {
   return JSON.parse(read(MANIFEST));
 }
 
-test('manifest names the ponytail extension with a pinned version', () => {
+test('manifest names the prune extension with a pinned version', () => {
   const manifest = loadManifest();
   assert.equal(manifest.name, EXTENSION_NAME);
   assert.match(manifest.version, PINNED_SEMVER);
@@ -51,7 +51,7 @@ test('version stays aligned with the other plugin manifests', () => {
   assert.equal(manifest.version, claude.version);
 });
 
-test('contextFileName resolves to a file carrying the ponytail rules', () => {
+test('contextFileName resolves to a file carrying the prune rules', () => {
   const manifest = loadManifest();
   assert.ok(manifest.contextFileName, 'contextFileName must be set so rules load every session');
   const context = read(manifest.contextFileName);

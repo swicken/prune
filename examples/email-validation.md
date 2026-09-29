@@ -2,7 +2,7 @@
 
 **Task:** "Validate an email address in Python."
 
-## Without Ponytail
+## Without Prune
 
 ```python
 import re
@@ -33,14 +33,14 @@ def validate_email(email: str) -> bool:
 
 A class, a wrapper, a regex that still rejects valid addresses and accepts invalid ones. Regex cannot validate email. Only a delivery attempt can.
 
-## With Ponytail
+## With Prune
 
 No format check proves an address is real, so stop pretending one does. The
 real validation is a round-trip — send a confirmation link and act on the
 click:
 
 ```python
-# ponytail: the only real validation is delivery; confirm via a clicked link
+# prune: the only real validation is delivery; confirm via a clicked link
 send_confirmation(email)
 ```
 
@@ -48,7 +48,7 @@ Want a cheap gate before sending (catch the empty box and the obvious typo)?
 The standard library parses it, so you don't hand-roll a regex:
 
 ```python
-# ponytail: stdlib parse; rejects "" and "no-at-sign", and nothing more — a UX nicety, not proof
+# prune: stdlib parse; rejects "" and "no-at-sign", and nothing more — a UX nicety, not proof
 from email.utils import parseaddr
 addr = parseaddr(email)[1]
 ok = "@" in addr and not addr.startswith("@") and not addr.endswith("@")
@@ -64,7 +64,7 @@ header-injection waiting to land in your outbound mail. Strip control
 characters before it goes near a header:
 
 ```python
-# ponytail: not optional — newlines in an address are an attack, not an address
+# prune: not optional — newlines in an address are an attack, not an address
 if "\n" in email or "\r" in email:
     raise ValueError("invalid address")
 ```

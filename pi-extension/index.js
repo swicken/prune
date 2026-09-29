@@ -5,11 +5,11 @@ const {
   DEFAULT_MODE,
   getDefaultMode,
   normalizeMode,
-  normalizeConfigMode,
+  isDeactivationCommand,
   normalizePersistedMode,
   writeDefaultMode,
-} = require("../hooks/ponytail-config.js");
-const { getPonytailInstructions, filterSkillBodyForMode } = require("../hooks/ponytail-instructions.js");
+} = require("../hooks/prune-config.js");
+const { getPruneInstructions, filterSkillBodyForMode } = require("../hooks/prune-instructions.js");
 
 export { filterSkillBodyForMode };
 export const readDefaultMode = getDefaultMode;
@@ -20,7 +20,7 @@ export function resolveSessionMode(entries, fallbackMode = DEFAULT_MODE) {
 
   for (let i = entries.length - 1; i >= 0; i -= 1) {
     const entry = entries[i];
-    if (entry?.type !== "custom" || entry?.customType !== "ponytail-mode") continue;
+    if (entry?.type !== "custom" || entry?.customType !== "prune-mode") continue;
 
     const mode = normalizePersistedMode(entry?.data?.mode);
     if (mode) return mode;
@@ -29,12 +29,11 @@ export function resolveSessionMode(entries, fallbackMode = DEFAULT_MODE) {
   return fallback;
 }
 
-export function parsePonytailCommand(text, defaultMode = DEFAULT_MODE) {
-  const fallback = normalizePersistedMode(defaultMode) || DEFAULT_MODE;
+export function parsePruneCommand(text, defaultMode = DEFAULT_MODE) {
   const normalizedText = String(text || "").trim().toLowerCase();
 
   if (!normalizedText) {
-    return { type: "set-mode", mode: fallback === "off" ? "full" : fallback };
+    return { type: "status" };
   }
 
   const [primary, secondary] = normalizedText.split(/\s+/);
@@ -42,7 +41,7 @@ export function parsePonytailCommand(text, defaultMode = DEFAULT_MODE) {
   if (primary === "status") return { type: "status" };
 
   if (primary === "default") {
-    const mode = normalizeConfigMode(secondary);
+    const mode = normalizeMode(secondary);
     return mode ? { type: "set-default", mode } : { type: "invalid", reason: "invalid-default-mode" };
   }
 
@@ -52,7 +51,7 @@ export function parsePonytailCommand(text, defaultMode = DEFAULT_MODE) {
 
 export { writeDefaultMode };
 
-export default function ponytailExtension(pi) {
+export default function pruneExtension(pi) {
   let currentMode = DEFAULT_MODE;
   let configuredDefaultMode = getDefaultMode();
 
@@ -61,8 +60,8 @@ export default function ponytailExtension(pi) {
     if (!normalized) return;
 
     currentMode = normalized;
-    pi.appendEntry("ponytail-mode", { mode: normalized });
-    ctx?.ui?.notify?.(`Ponytail mode set to ${normalized}.`, "info");
+    pi.appendEntry("prune-mode", { mode: normalized });
+    ctx?.ui?.notify?.(`Prune mode set to ${normalized}.`, "info");
   };
 
   const sendAlias = (skillName, args, ctx) => {
@@ -78,22 +77,26 @@ export default function ponytailExtension(pi) {
     pi.sendUserMessage(message);
   };
 
-  pi.registerCommand("ponytail", {
-    description: "Set or report Ponytail mode",
+  pi.registerCommand("prune", {
+    description: "Set or report Prune mode",
     handler: async (args, ctx) => {
-      const parsed = parsePonytailCommand(args, configuredDefaultMode);
+      const parsed = parsePruneCommand(args, configuredDefaultMode);
 
       if (parsed.type === "status") {
-        ctx?.ui?.notify?.(`Ponytail: current ${currentMode} • default ${configuredDefaultMode}`, "info");
+        ctx?.ui?.notify?.(`Prune: current ${currentMode} • default ${configuredDefaultMode}`, "info");
         return;
       }
 
       if (parsed.type === "set-default") {
-        const written = writeDefaultMode(parsed.mode);
+        let written;
+        try { written = writeDefaultMode(parsed.mode); } catch (error) {
+          ctx?.ui?.notify?.(`Failed to save Prune default: ${error.message}`, "error");
+          return;
+        }
         if (written) {
           configuredDefaultMode = getDefaultMode();
           const message = configuredDefaultMode === written
-            ? `Default Ponytail mode set to ${written}.`
+            ? `Default Prune mode set to ${written}.`
             : `Saved default ${written}, but env override keeps default at ${configuredDefaultMode}.`;
           ctx?.ui?.notify?.(message, "info");
         }
@@ -105,30 +108,35 @@ export default function ponytailExtension(pi) {
         return;
       }
 
-      ctx?.ui?.notify?.("Unknown or unsupported /ponytail mode.", "warning");
+      ctx?.ui?.notify?.("Unknown or unsupported /prune mode.", "warning");
     },
   });
 
-  pi.registerCommand("ponytail-review", {
-    description: "Run /skill:ponytail-review",
-    handler: (_args, ctx) => sendAlias("/skill:ponytail-review", "", ctx),
+  pi.registerCommand("prune-review", {
+    description: "Run /skill:prune-review",
+    handler: (_args, ctx) => sendAlias("/skill:prune-review", "", ctx),
   });
 
-  pi.registerCommand("ponytail-audit", {
-    description: "Run /skill:ponytail-audit",
-    handler: (_args, ctx) => sendAlias("/skill:ponytail-audit", "", ctx),
+  pi.registerCommand("prune-audit", {
+    description: "Run /skill:prune-audit",
+    handler: (_args, ctx) => sendAlias("/skill:prune-audit", "", ctx),
   });
 
-  pi.registerCommand("ponytail-help", {
-    description: "Run /skill:ponytail-help",
-    handler: (_args, ctx) => sendAlias("/skill:ponytail-help", "", ctx),
+  pi.registerCommand("prune-debt", {
+    description: "Run /skill:prune-debt",
+    handler: (_args, ctx) => sendAlias("/skill:prune-debt", "", ctx),
+  });
+
+  pi.registerCommand("prune-help", {
+    description: "Run /skill:prune-help",
+    handler: (_args, ctx) => sendAlias("/skill:prune-help", "", ctx),
   });
 
   pi.on("input", async (event) => {
     if (event?.source === "extension") return;
 
     const text = String(event?.text || "");
-    if (currentMode !== "off" && /\b(stop ponytail|normal mode)\b/i.test(text)) {
+    if (currentMode !== "off" && isDeactivationCommand(text)) {
       setMode("off");
     }
   });
@@ -141,6 +149,6 @@ export default function ponytailExtension(pi) {
 
   pi.on("before_agent_start", async (event) => {
     if (!currentMode || currentMode === "off") return;
-    return { systemPrompt: `${event.systemPrompt}\n\n${getPonytailInstructions(currentMode)}` };
+    return { systemPrompt: `${event?.systemPrompt ? event.systemPrompt + "\n\n" : ""}${getPruneInstructions(currentMode)}` };
   });
 }

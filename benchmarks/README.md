@@ -1,47 +1,32 @@
-# Benchmark
+# Functional benchmarks
 
-Three arms (no skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), three models, five everyday tasks, **10 runs per cell, median reported**. Code LOC is counted from fenced code blocks; tokens, cost, and latency come straight from the API.
+Success means required behavior survives. Code size and elapsed time are secondary observations, and no keyword-only or line-count score substitutes for correctness.
 
-## Reproduce
+## Adapter comparison
 
 ```bash
-cp ../.env.example ../.env      # add your ANTHROPIC_API_KEY
-npx promptfoo@latest eval -c promptfooconfig.yaml --repeat 10
-npx promptfoo@latest view
+python3 benchmarks/compare.py --before /path/to/untouched/ponytail --output /tmp/adapter-scores.json
 ```
 
-Tasks: email validator, JS debounce, CSV sum, React countdown, FastAPI rate-limit (see `promptfooconfig.yaml`). Single-shot completions, default temperature.
+`adapters.cjs` runs the same 16 contracts against Ponytail and Prune, with isolated config/state directories. The cases cover saved defaults, preservation of unrelated or invalid configuration, BOMs, mode filtering, Claude overrides/subagent JSON, Codex schema, fallback rules, Pi status/deactivation/missing events, and save failures. These deliberately target known regressions, with two positive controls. The pass fraction is not an overall reliability rate or a skill-quality score. `npm test` runs them against the candidate to prevent recurrence.
 
-## Median results (10 runs, 2026-06-13)
+## Live coding comparison
 
-**Code (lines)**
+```bash
+python3 benchmarks/agentic/run.py --selftest
+python3 benchmarks/agentic/run.py --live /tmp/before --skill /path/to/ponytail/skills/ponytail/SKILL.md
+python3 benchmarks/agentic/run.py --live /tmp/after
+python3 benchmarks/agentic/run.py --score /tmp/after
+```
 
-| arm | Haiku | Sonnet | Opus |
-|---|--:|--:|--:|
-| baseline (no skill) | 518 | 693 | 256 |
-| caveman | 116 | 120 | 67 |
-| **ponytail** | **39** | **44** | **51** |
+This uses the installed, authenticated Codex CLI; normal account usage applies. Each arm receives the same 12 seeded requests and its exact skill in a fresh workspace. The runner creates a temporary `CODEX_HOME`, copies only the login file, ignores user config, and removes the temporary home afterward. It does not expose or save credentials in the workspace. CLI-managed service defaults and bundled tooling can still affect runs. Both arms should use the same CLI/model/environment; record them with the results.
 
-**Cost (USD, 5 tasks)**
+Tasks exercise reuse, shared-path fixes, real versus incidental duplication, behavior preservation, runtime compatibility, removal of newly orphaned code, runnable regression checks, spec completeness, iterator debugging, requested explanation depth, and debt classification. The model sees seeds and requests but not the grader. `cases.py` contains independent expected values. Grading runs submitted Python/JS; only run it on code you trust. Execution timeouts limit hangs, not malicious behavior.
 
-| arm | Haiku | Sonnet | Opus |
-|---|--:|--:|--:|
-| baseline (no skill) | 0.032 | 0.141 | 0.135 |
-| caveman | 0.014 | 0.045 | 0.075 |
-| **ponytail** | **0.010** | **0.032** | **0.071** |
+The regression test must pass on the submitted fix and fail when the original bug is restored; bytecode caches are removed between those checks. Grader self-tests verify a good reference, missing implementations, and an under-delivering stub. Semantic report quality and shared-helper design also require source review. Passes prove these contracts only; they do not prove general safety or universal superiority. A single paired run is a pilot, not a statistical comparison. Run several independent pairs and keep model/settings fixed before making broader claims.
 
-**Latency (seconds, 5 tasks)**
+Artifacts include exact skill snapshots, generated files, agent-reported commands, independent scores, and timing/usage summaries. [Current report](results/2026-09-29-prune.md).
 
-| arm | Haiku | Sonnet | Opus |
-|---|--:|--:|--:|
-| baseline (no skill) | 37.7 | 124.1 | 58.7 |
-| caveman | 14.9 | 34.7 | 23.1 |
-| **ponytail** | **9.9** | **20.1** | **18.0** |
+## Historical material
 
-Versus baseline, ponytail writes **80-94% less code**, costs **47-77% less**, and runs **3-6x faster**, on every model.
-
-## Notes
-
-- Caveman is a prose-compression skill (it leaves code "normal"), so it lands between baseline and ponytail on code size and wins mainly on prose tokens.
-- Cost reflects single-shot calls that re-send the skill every time. In real sessions the skill is injected once and prompt-cached, so the cost gap widens further in ponytail's favor.
-- These are everyday tasks. For production-grade specs, where an unconstrained agent bloats much harder, see the writeups in `results/`.
+The existing `promptfooconfig.yaml`, providers, prompts, chart, and older result files originate from Ponytail. They measure single-shot code size and API usage, lack the functional gates above, and are retained for provenance. They are not the validation path for Prune and their numbers must not be relabelled as Prune results.

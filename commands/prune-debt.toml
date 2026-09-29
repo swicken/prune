@@ -1,0 +1,2 @@
+description = "Report marked compromises without changing mode"
+prompt = "Use the prune-debt skill to inspect real prune: comment compromises. Report location, ceiling and revisit trigger; flag missing triggers, ignore examples and ordinary explanatory markers. Read-only unless asked to save. Preserve the current mode."

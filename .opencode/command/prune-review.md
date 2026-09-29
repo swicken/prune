@@ -1,0 +1,5 @@
+---
+description: Senior PR review: catch what kills prod, cut what shouldn't exist
+---
+
+Review the current diff (or a GitHub PR if given a number) as the senior who has been paged at 3am. One line per finding, dangers first: L<line>: <tag> <what>. <fix>. Defend tags (list first): security (trust-boundary hole, injection, secret, missing authz), data-loss (unhandled write-path failure, missing transaction), dry (same decision in its 3rd+ copy that must change together), footgun (N+1/race/money/timezone/encoding landmine that passes the happy path). Subtract tags: delete, stdlib, native, yagni, shrink. When a finding is both a cut and a danger, tag it by the worse outcome so it sorts with the dangers. End: '🔴 N prod risks · ✂️ M cuts (net −lines).' Both empty: 'Clean. Ship.' No style or naming nits. With --comment, post ONE summary review via gh pr review <n> --comment, never approve or request-changes.
