@@ -1,15 +1,15 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "ponytail",
-  "description": "Lazy senior dev mode for AI agents. The best code is the code you never wrote.",
+  "name": "prune",
+  "description": "Readable, scoped, complete, verified engineering.",
   "owner": {
     "name": "Scott Wicken",
     "url": "https://github.com/swicken"
   },
   "plugins": [
     {
-      "name": "ponytail",
-      "description": "Forces the laziest solution that works. YAGNI, stdlib first, one line over fifty.",
+      "name": "prune",
+      "description": "Readable, scoped, complete implementations. Keep what earns its place.",
       "source": "./",
       "category": "productivity"
     }

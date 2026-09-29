@@ -1,6 +1,6 @@
 {
-  "name": "ponytail",
-  "version": "4.6.1",
-  "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, no unrequested abstractions.",
+  "name": "prune",
+  "version": "4.7.0",
+  "description": "Keep what earns its place. Readable, scoped, complete, verified engineering.",
   "contextFileName": "AGENTS.md"
 }

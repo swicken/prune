@@ -16,7 +16,7 @@ function run(script, env, input = '') {
   });
 }
 
-const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'ponytail-hooks-'));
+const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'prune-hooks-'));
 const home = path.join(temp, 'home');
 const pluginData = path.join(temp, 'plugin-data');
 fs.mkdirSync(home, { recursive: true });
@@ -26,119 +26,126 @@ const codexEnv = {
   HOME: home,
   USERPROFILE: home,
   PLUGIN_DATA: pluginData,
-  PONYTAIL_DEFAULT_MODE: 'ultra',
+  PRUNE_DEFAULT_MODE: 'ultra',
 };
-const codexState = path.join(pluginData, '.ponytail-active');
+const codexState = path.join(pluginData, '.prune-active');
 
-let result = run('ponytail-activate.js', codexEnv);
+let result = run('prune-activate.js', codexEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'ultra');
 let output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:ULTRA');
+assert.equal(output.systemMessage, 'PRUNE:ULTRA');
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE ACTIVE — level: ultra/,
+  /PRUNE MODE ACTIVE — level: ultra/,
 );
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'prune-mode-tracker.js',
   codexEnv,
-  JSON.stringify({ prompt: '@ponytail lite' }),
+  JSON.stringify({ prompt: '@prune lite' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:LITE');
+assert.equal(output.systemMessage, 'PRUNE:LITE');
 // A mid-session switch must re-inject the ruleset filtered to the new level,
-// not just flip the badge. "name the lazier alternative" is lite-only text.
+// not just flip the badge. "mention a materially simpler alternative" is lite-only text.
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE CHANGED — level: lite/,
+  /PRUNE MODE CHANGED — level: lite/,
 );
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /name the lazier alternative/,
+  /mention a materially simpler alternative/,
 );
 
-// Bare /ponytail reports the active level without resetting it (default is
+// Bare /prune reports the active level without resetting it (default is
 // ultra here; the live mode is lite and must survive).
 result = run(
-  'ponytail-mode-tracker.js',
+  'prune-mode-tracker.js',
   codexEnv,
-  JSON.stringify({ prompt: '/ponytail' }),
+  JSON.stringify({ prompt: '/prune' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 output = JSON.parse(result.stdout);
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE ACTIVE — level: lite/,
+  /PRUNE MODE ACTIVE — level: lite/,
 );
 
-// "stop ponytail" mid-sentence must NOT deactivate.
+// "stop prune" mid-sentence must NOT deactivate.
 result = run(
-  'ponytail-mode-tracker.js',
+  'prune-mode-tracker.js',
   codexEnv,
-  JSON.stringify({ prompt: "please don't stop ponytail here" }),
+  JSON.stringify({ prompt: "please don't stop prune here" }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 assert.equal(result.stdout, '');
 
-// /ponytail default <mode> persists to the config file, leaves the live mode alone.
+// /prune default <mode> persists to the config file, leaves the live mode alone.
 result = run(
-  'ponytail-mode-tracker.js',
+  'prune-mode-tracker.js',
   { ...codexEnv, XDG_CONFIG_HOME: path.join(temp, 'xdg') },
-  JSON.stringify({ prompt: '/ponytail default full' }),
+  JSON.stringify({ prompt: '/prune default full' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 assert.deepEqual(
-  JSON.parse(fs.readFileSync(path.join(temp, 'xdg', 'ponytail', 'config.json'), 'utf8')),
+  JSON.parse(fs.readFileSync(path.join(temp, 'xdg', 'prune', 'config.json'), 'utf8')),
   { defaultMode: 'full' },
 );
 output = JSON.parse(result.stdout);
+assert.equal(output.systemMessage, 'PRUNE:LITE');
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL DEFAULT SET/,
+  /PRUNE DEFAULT SET/,
 );
 
 // SubagentStart injects the active ruleset into spawned agents.
-result = run('ponytail-subagent.js', codexEnv);
+result = run('prune-subagent.js', codexEnv);
 assert.equal(result.status, 0, result.stderr);
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:LITE');
+assert.equal(output.systemMessage, 'PRUNE:LITE');
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /name the lazier alternative/,
+  /mention a materially simpler alternative/,
 );
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'prune-mode-tracker.js',
   codexEnv,
   JSON.stringify({ prompt: 'normal mode' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.existsSync(codexState), false);
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:OFF');
+assert.equal(output.systemMessage, 'PRUNE:OFF');
+
+// Status after explicit off must stay off, not report the startup default.
+result = run('prune-mode-tracker.js', codexEnv, JSON.stringify({ prompt: '/prune' }));
+assert.equal(result.status, 0, result.stderr);
+assert.equal(JSON.parse(result.stdout).systemMessage, 'PRUNE:OFF');
+assert.equal(fs.existsSync(codexState), false);
 
 // No active mode → SubagentStart injects nothing.
-result = run('ponytail-subagent.js', codexEnv);
+result = run('prune-subagent.js', codexEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(result.stdout, '');
 
 const claudeEnv = {
   HOME: home,
   USERPROFILE: home,
-  PONYTAIL_DEFAULT_MODE: 'full',
+  PRUNE_DEFAULT_MODE: 'full',
 };
 delete claudeEnv.PLUGIN_DATA;
 
-result = run('ponytail-activate.js', claudeEnv);
+result = run('prune-activate.js', claudeEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(
-  fs.readFileSync(path.join(home, '.claude', '.ponytail-active'), 'utf8'),
+  fs.readFileSync(path.join(home, '.claude', '.prune-active'), 'utf8'),
   'full',
 );
 

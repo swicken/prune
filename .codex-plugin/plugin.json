@@ -1,26 +1,34 @@
 {
-  "name": "ponytail",
-  "version": "4.6.1",
-  "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, scope control, readability over line count.",
+  "name": "prune",
+  "version": "4.7.0",
+  "description": "Keep what earns its place. Readable, scoped, complete, verified engineering.",
   "author": {
     "name": "Scott Wicken",
     "url": "https://github.com/swicken"
   },
-  "homepage": "https://github.com/swicken/ponytail",
-  "repository": "https://github.com/swicken/ponytail",
+  "homepage": "https://github.com/swicken/prune",
+  "repository": "https://github.com/swicken/prune",
   "license": "MIT",
-  "keywords": ["yagni", "minimalism", "code-review", "productivity"],
+  "keywords": [
+    "yagni",
+    "minimalism",
+    "code-review",
+    "productivity"
+  ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Ponytail",
+    "displayName": "Prune",
     "shortDescription": "Lazy senior developer mode",
     "longDescription": "Prefer YAGNI, the standard library, native platform features, and the smallest correct implementation.",
     "developerName": "Scott Wicken",
     "category": "Productivity",
-    "capabilities": ["Instructions", "Lifecycle hooks"],
-    "websiteURL": "https://github.com/swicken/ponytail",
+    "capabilities": [
+      "Instructions",
+      "Lifecycle hooks"
+    ],
+    "websiteURL": "https://github.com/swicken/prune",
     "defaultPrompt": [
-      "Use Ponytail mode for this task.",
+      "Use Prune mode for this task.",
       "Review this diff for over-engineering.",
       "Find the smallest correct implementation."
     ],

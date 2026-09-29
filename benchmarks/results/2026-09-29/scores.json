@@ -1,0 +1,413 @@
+{
+  "baseline_commit": "9223a3f12f1a3eab377d0494bcbc9f544fa16b61",
+  "upstream_reference": "e3ba2aa",
+  "environment": {
+    "codex_cli": "0.136.0",
+    "model": "CLI default; not exposed in captured event metadata, not pinned",
+    "python": "3.14.7",
+    "node": "24.15.0 (Object.groupBy disabled for Node 18 capability check)",
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O"
+  },
+  "runs": [
+    {
+      "arm": "before",
+      "pair": 1,
+      "passed": 11,
+      "total": 12,
+      "seconds": 187.15,
+      "usage": {
+        "input_tokens": 487694,
+        "cached_input_tokens": 448640,
+        "output_tokens": 8212,
+        "reasoning_output_tokens": 1765
+      },
+      "skill_sha256": "17f763b8fb50862227b1acf87fe96072a81888ff1f42e16fb0ef8d8b72658f1e",
+      "code_files": 19,
+      "nonblank_code_lines": 92,
+      "command_count": 44,
+      "failed_commands": 5,
+      "scores": {
+        "reuse": {
+          "pass": true,
+          "reason": ""
+        },
+        "sibling": {
+          "pass": true,
+          "reason": ""
+        },
+        "shared-decision": {
+          "pass": true,
+          "reason": ""
+        },
+        "independent": {
+          "pass": true,
+          "reason": ""
+        },
+        "preserve": {
+          "pass": true,
+          "reason": ""
+        },
+        "compatibility": {
+          "pass": false,
+          "reason": "/private/tmp/prune-benchmark-before/compatibility/groups.cjs:2\n  (groups[row.status] ||= []).push(row);\n                              ^\n\nTypeError: groups[row.status].push is not a function\n    at /private/tmp/prune-benchmark-before/compatibility/groups.cjs:2:31\n    at Array.reduce (<anonymous>)\n    at module.exports.groupByStatus (/private/tmp/prune-benchmark-before/compatibility/groups.cjs:1:45)\n    at [eval]:1:142\n    at runScriptInThisContext (node:internal/vm:219:10)\n    at node:internal/process/execution:451:12\n    at [eval]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:449:60)\n    at evalFunction (node:internal/process/execution:283:30)\n    at evalTypeScript (node:internal/process/execution:295:3)\n\nNode.js v24.15.0\n"
+        },
+        "orphan": {
+          "pass": true,
+          "reason": ""
+        },
+        "regression": {
+          "pass": true,
+          "reason": "",
+          "detects_original_bug": true
+        },
+        "complete": {
+          "pass": true,
+          "reason": ""
+        },
+        "hypothesis": {
+          "pass": true,
+          "reason": ""
+        },
+        "explanation": {
+          "pass": true,
+          "reason": ""
+        },
+        "debt": {
+          "pass": true,
+          "reason": ""
+        }
+      }
+    },
+    {
+      "arm": "after",
+      "pair": 1,
+      "passed": 11,
+      "total": 12,
+      "seconds": 160.11,
+      "usage": {
+        "input_tokens": 395748,
+        "cached_input_tokens": 350976,
+        "output_tokens": 7142,
+        "reasoning_output_tokens": 1204
+      },
+      "skill_sha256": "7c61f3d39d57afe7e75809e65875d6abeca94bc89f56968f1dac6f399691a61b",
+      "code_files": 19,
+      "nonblank_code_lines": 104,
+      "command_count": 43,
+      "failed_commands": 2,
+      "scores": {
+        "reuse": {
+          "pass": true,
+          "reason": ""
+        },
+        "sibling": {
+          "pass": true,
+          "reason": ""
+        },
+        "shared-decision": {
+          "pass": true,
+          "reason": ""
+        },
+        "independent": {
+          "pass": true,
+          "reason": ""
+        },
+        "preserve": {
+          "pass": true,
+          "reason": ""
+        },
+        "compatibility": {
+          "pass": false,
+          "reason": "/private/tmp/prune-benchmark-after/compatibility/groups.cjs:7\n    groups[status].push(row);\n                   ^\n\nTypeError: groups[status].push is not a function\n    at module.exports.groupByStatus (/private/tmp/prune-benchmark-after/compatibility/groups.cjs:7:20)\n    at [eval]:1:142\n    at runScriptInThisContext (node:internal/vm:219:10)\n    at node:internal/process/execution:451:12\n    at [eval]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:449:60)\n    at evalFunction (node:internal/process/execution:283:30)\n    at evalTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.15.0\n"
+        },
+        "orphan": {
+          "pass": true,
+          "reason": ""
+        },
+        "regression": {
+          "pass": true,
+          "reason": "",
+          "detects_original_bug": true
+        },
+        "complete": {
+          "pass": true,
+          "reason": ""
+        },
+        "hypothesis": {
+          "pass": true,
+          "reason": ""
+        },
+        "explanation": {
+          "pass": true,
+          "reason": ""
+        },
+        "debt": {
+          "pass": true,
+          "reason": ""
+        }
+      }
+    },
+    {
+      "arm": "before",
+      "pair": 2,
+      "passed": 11,
+      "total": 12,
+      "seconds": 171.6,
+      "usage": {
+        "input_tokens": 317425,
+        "cached_input_tokens": 281216,
+        "output_tokens": 7439,
+        "reasoning_output_tokens": 1560
+      },
+      "skill_sha256": "17f763b8fb50862227b1acf87fe96072a81888ff1f42e16fb0ef8d8b72658f1e",
+      "code_files": 19,
+      "nonblank_code_lines": 105,
+      "command_count": 39,
+      "failed_commands": 2,
+      "scores": {
+        "reuse": {
+          "pass": true,
+          "reason": ""
+        },
+        "sibling": {
+          "pass": true,
+          "reason": ""
+        },
+        "shared-decision": {
+          "pass": true,
+          "reason": ""
+        },
+        "independent": {
+          "pass": true,
+          "reason": ""
+        },
+        "preserve": {
+          "pass": true,
+          "reason": ""
+        },
+        "compatibility": {
+          "pass": false,
+          "reason": "/private/tmp/prune-benchmark-before-2/compatibility/groups.cjs:3\n    (groups[row.status] ||= []).push(row);\n                                ^\n\nTypeError: groups[row.status].push is not a function\n    at /private/tmp/prune-benchmark-before-2/compatibility/groups.cjs:3:33\n    at Array.reduce (<anonymous>)\n    at groupByStatus (/private/tmp/prune-benchmark-before-2/compatibility/groups.cjs:2:15)\n    at [eval]:1:142\n    at runScriptInThisContext (node:internal/vm:219:10)\n    at node:internal/process/execution:451:12\n    at [eval]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:449:60)\n    at evalFunction (node:internal/process/execution:283:30)\n    at evalTypeScript (node:internal/process/execution:295:3)\n\nNode.js v24.15.0\n"
+        },
+        "orphan": {
+          "pass": true,
+          "reason": ""
+        },
+        "regression": {
+          "pass": true,
+          "reason": "",
+          "detects_original_bug": true
+        },
+        "complete": {
+          "pass": true,
+          "reason": ""
+        },
+        "hypothesis": {
+          "pass": true,
+          "reason": ""
+        },
+        "explanation": {
+          "pass": true,
+          "reason": ""
+        },
+        "debt": {
+          "pass": true,
+          "reason": ""
+        }
+      }
+    },
+    {
+      "arm": "after",
+      "pair": 2,
+      "passed": 11,
+      "total": 12,
+      "seconds": 145.89,
+      "usage": {
+        "input_tokens": 255045,
+        "cached_input_tokens": 232960,
+        "output_tokens": 6465,
+        "reasoning_output_tokens": 1122
+      },
+      "skill_sha256": "7c61f3d39d57afe7e75809e65875d6abeca94bc89f56968f1dac6f399691a61b",
+      "code_files": 19,
+      "nonblank_code_lines": 107,
+      "command_count": 35,
+      "failed_commands": 1,
+      "scores": {
+        "reuse": {
+          "pass": true,
+          "reason": ""
+        },
+        "sibling": {
+          "pass": true,
+          "reason": ""
+        },
+        "shared-decision": {
+          "pass": true,
+          "reason": ""
+        },
+        "independent": {
+          "pass": true,
+          "reason": ""
+        },
+        "preserve": {
+          "pass": true,
+          "reason": ""
+        },
+        "compatibility": {
+          "pass": false,
+          "reason": "[eval]:1\ndelete Object.groupBy; const {groupByStatus}=require(\"./groups.cjs\"); const rows=[{status:\"__proto__\"},{status:\"ok\"},{status:\"ok\"}]; const g=groupByStatus(rows); if(g.ok.length!==2 || !Object.prototype.hasOwnProperty.call(g,\"__proto__\") || g[\"__proto__\"].length!==1 || rows.length!==3) throw Error(\"bad groups\");\n                                                                                                                                                                                                                                                                                              ^\n\nError: bad groups\n    at [eval]:1:293\n    at runScriptInThisContext (node:internal/vm:219:10)\n    at node:internal/process/execution:451:12\n    at [eval]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:449:60)\n    at evalFunction (node:internal/process/execution:283:30)\n    at evalTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.15.0\n"
+        },
+        "orphan": {
+          "pass": true,
+          "reason": ""
+        },
+        "regression": {
+          "pass": true,
+          "reason": "",
+          "detects_original_bug": true
+        },
+        "complete": {
+          "pass": true,
+          "reason": ""
+        },
+        "hypothesis": {
+          "pass": true,
+          "reason": ""
+        },
+        "explanation": {
+          "pass": true,
+          "reason": ""
+        },
+        "debt": {
+          "pass": true,
+          "reason": ""
+        }
+      }
+    }
+  ],
+  "adapter_contracts": {
+    "kind": "deterministic adapter contracts",
+    "passed": {
+      "before": 2,
+      "after": 16
+    },
+    "total": 16,
+    "results": {
+      "before": {
+        "default saves and reloads": {
+          "pass": true
+        },
+        "default preserves other fields": {
+          "pass": false,
+          "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   keep: true\n- }\n"
+        },
+        "malformed config preserved": {
+          "pass": false,
+          "reason": "Missing expected exception."
+        },
+        "non-object config preserved": {
+          "pass": false,
+          "reason": "Missing expected exception."
+        },
+        "BOM config accepted": {
+          "pass": false,
+          "reason": "Expected values to be strictly equal:\n\n'full' !== 'lite'\n"
+        },
+        "review rejected as default": {
+          "pass": false,
+          "reason": "Expected values to be strictly equal:\n\n'review' !== null\n"
+        },
+        "plain mode-labelled rule retained": {
+          "pass": false,
+          "reason": "The input did not match the regular expression /general rule/. Input:\n\n''\n"
+        },
+        "Claude config override honored": {
+          "pass": false,
+          "reason": "ENOENT: no such file or directory, open '/var/folders/b3/rjltbh_n64d6qv2x9rp5lc080000gn/T/prune-contract-JaRC1U/custom/.ponytail-active'"
+        },
+        "Claude subagent context structured": {
+          "pass": false,
+          "reason": "Unexpected token 'P', \"PONYTAIL M\"... is not valid JSON"
+        },
+        "Codex hook schema retained": {
+          "pass": true
+        },
+        "fallback carries reuse and requested explanation": {
+          "pass": false,
+          "reason": "The input did not match the regular expression /Look before you write|already.*codebase/. Input:\n\n'PONYTAIL MODE ACTIVE \u2014 level: full\\n' +\n  '\\n' +\n  'You are a lazy senior developer. Lazy means efficient, not careless. The best code is the code neve"
+        },
+        "Pi bare command reports status": {
+          "pass": false,
+          "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   mode: 'full',\n+   type: 'set-mode'\n-   type: 'status'\n  }\n"
+        },
+        "Pi mention leaves mode active": {
+          "pass": false,
+          "reason": "The expression evaluated to a falsy value:\n\n  assert.ok(await events.before_agent_start({systemPrompt:'base'}))\n"
+        },
+        "Pi missing event handled": {
+          "pass": false,
+          "reason": "Cannot read properties of undefined (reading 'systemPrompt')"
+        },
+        "Pi failed save reported": {
+          "pass": false,
+          "reason": "The expression evaluated to a falsy value:\n\n  assert.ok(notices.includes('error'))\n"
+        },
+        "default save failure reported by hook": {
+          "pass": false,
+          "reason": "The input did not match the regular expression /NOT SAVED/. Input:\n\n'PONYTAIL DEFAULT SET \u2014 new sessions start in lite.'\n"
+        }
+      },
+      "after": {
+        "default saves and reloads": {
+          "pass": true
+        },
+        "default preserves other fields": {
+          "pass": true
+        },
+        "malformed config preserved": {
+          "pass": true
+        },
+        "non-object config preserved": {
+          "pass": true
+        },
+        "BOM config accepted": {
+          "pass": true
+        },
+        "review rejected as default": {
+          "pass": true
+        },
+        "plain mode-labelled rule retained": {
+          "pass": true
+        },
+        "Claude config override honored": {
+          "pass": true
+        },
+        "Claude subagent context structured": {
+          "pass": true
+        },
+        "Codex hook schema retained": {
+          "pass": true
+        },
+        "fallback carries reuse and requested explanation": {
+          "pass": true
+        },
+        "Pi bare command reports status": {
+          "pass": true
+        },
+        "Pi mention leaves mode active": {
+          "pass": true
+        },
+        "Pi missing event handled": {
+          "pass": true
+        },
+        "Pi failed save reported": {
+          "pass": true
+        },
+        "default save failure reported by hook": {
+          "pass": true
+        }
+      }
+    }
+  }
+}

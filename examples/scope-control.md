@@ -4,7 +4,7 @@
 
 The bug is one line: a range that stops short.
 
-## Without Ponytail
+## Without Prune
 
 ```diff
 - for i in range(len(items) - 1):
@@ -24,7 +24,7 @@ One-line bug, forty-line diff across three files. The fix is now buried in a
 refactor nobody asked for, the review is an hour instead of a minute, and two
 of the touched files weren't even broken.
 
-## With Ponytail
+## With Prune
 
 ```diff
 - for i in range(len(items) - 1):
@@ -33,7 +33,7 @@ of the touched files weren't even broken.
 ```
 
 ```python
-# ponytail: idiomatic, same fix — sum(item.price for item in items)
+# prune: idiomatic, same fix — sum(item.price for item in items)
 ```
 
 **40 lines across 3 files → 1 line in 1.** Fix the thing you were sent to
