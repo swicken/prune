@@ -27,9 +27,10 @@ test('PowerShell manifest commands actually execute', { skip: !hasPowerShell || 
     const config = JSON.parse(fs.readFileSync(path.join(root, 'hooks/hooks.json'), 'utf8'));
     for (const event of Object.values(config.hooks)) for (const entry of event) for (const hook of entry.hooks) {
       if (!hook.commandWindows) continue;
-      const p = spawnSync(powershell, ['-NoProfile', '-Command', hook.commandWindows], { input: '{}', encoding: 'utf8', timeout: 10000, env: { ...process.env, CLAUDE_PLUGIN_ROOT: root, CLAUDE_CONFIG_DIR: temp, XDG_CONFIG_HOME: temp, PRUNE_DEFAULT_MODE: 'full' } });
+      const p = spawnSync(powershell, ['-NoProfile', '-Command', hook.commandWindows], { input: JSON.stringify({ prompt: '/prune lite' }), encoding: 'utf8', timeout: 10000, env: { ...process.env, CLAUDE_PLUGIN_ROOT: root, CLAUDE_CONFIG_DIR: temp, XDG_CONFIG_HOME: temp, PRUNE_DEFAULT_MODE: 'full' } });
       assert.equal(p.status, 0, p.stderr);
       assert.ok(p.stdout.trim(), hook.commandWindows);
     }
+    assert.equal(fs.readFileSync(path.join(temp, '.prune-active'), 'utf8'), 'lite');
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
