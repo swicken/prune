@@ -35,9 +35,9 @@ instructions, keep its copied rule text aligned with `AGENTS.md`.
 - `skills/prune-help/SKILL.md`: quick reference
 - `AGENTS.md`: compact always-on instruction set for agents without skill support
 
-## Candidate testing
+## Testing
 
-The candidate is on `codex/prune`; `main` preserves the Ponytail baseline until review. Load adapters from the candidate checkout. Runtime manifests have been renamed, with separate Prune config/state paths. Existing project instruction adapters are always-on and do not offer session modes.
+Prune is on `main`; the Ponytail baseline remains in Git history at `9223a3f`. Load adapters from the Prune checkout. Runtime manifests have been renamed, with separate Prune config/state paths. Existing project instruction adapters are always-on and do not offer session modes.
 
 Automated tests exercise the shared hook contracts, Pi behavior, manifest references, OpenCode injection, and Gemini packaging. They do not constitute an end-to-end test of each installed host. Claude-specific behavior is tested by invoking the hook processes; live coding evaluation uses Codex CLI. No new host adapters were added.
 

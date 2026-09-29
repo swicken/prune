@@ -4,7 +4,7 @@ Keep what earns its place. A coding skill for readable, scoped, complete, verifi
 
 Prune starts with Scott Wicken’s Ponytail fork and incorporates selected upstream fixes. It keeps the simplicity ladder: question speculative work, reuse what exists, then reach for the standard library, native features, and installed dependencies before writing code. Readability and required behavior constrain every shortcut.
 
-This repository is private during testing. `main` preserves the untouched Ponytail baseline at `9223a3f`; `codex/prune` contains the implementation for review. No changes were made in the original Ponytail checkout.
+This repository is private during testing. `main` contains Prune. The untouched Ponytail baseline at `9223a3f` remains in Git history; [PR #1](https://github.com/swicken/prune/pull/1) preserves the implementation diff. No changes were made in the original Ponytail checkout.
 
 ## What changed
 
@@ -18,18 +18,17 @@ This repository is private during testing. `main` preserves the untouched Ponyta
 
 Requested explanations remain complete. No fixed three-line answer limit; line count is a secondary observation rather than a success criterion.
 
-## Test the candidate
+## Test Prune
 
 ```bash
 gh repo clone swicken/prune
 cd prune
-git switch codex/prune
 npm run check
 npm test
 python3 benchmarks/agentic/run.py --selftest
 ```
 
-Use the candidate checkout for testing while `main` remains the comparison baseline. Load `skills/prune/SKILL.md` directly in a host that supports skills, or use its plugin adapter. The existing Claude, Codex, Pi, OpenCode, Gemini, and instruction-file adapters are retained; see [adapter files and limitations](docs/agent-portability.md). Do not install from the repository's default branch until the candidate is merged: it deliberately contains Ponytail.
+Use the `main` checkout for testing. Load `skills/prune/SKILL.md` directly in a host that supports skills, or use its plugin adapter. The existing Claude, Codex, Pi, OpenCode, Gemini, and instruction-file adapters are retained; see [adapter files and limitations](docs/agent-portability.md).
 
 The five skills are `prune`, `prune-review`, `prune-audit`, `prune-debt`, and `prune-help`. Audit/debt/help are one-shot; review/audit/debt are read-only by default. Existing review comment publication remains explicit opt-in.
 

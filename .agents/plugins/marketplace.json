@@ -9,7 +9,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/swicken/prune.git",
-        "ref": "codex/prune"
+        "ref": "main"
       },
       "policy": {
         "installation": "AVAILABLE",
