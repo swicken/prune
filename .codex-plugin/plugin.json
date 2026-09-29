@@ -32,8 +32,8 @@
       "Review this diff for over-engineering.",
       "Find the smallest correct implementation."
     ],
-    "brandColor": "#111111",
-    "composerIcon": "./assets/logo.png",
-    "logo": "./assets/logo.png"
+    "brandColor": "#65405c",
+    "composerIcon": "./assets/prune-mascot.png",
+    "logo": "./assets/prune-mascot.png"
   }
 }
