@@ -21,7 +21,7 @@ for (const shell of ['bash', powershell]) {
     } finally { fs.rmSync(temp, { recursive: true, force: true }); }
   });
 }
-test('PowerShell manifest commands actually execute', { skip: !hasPowerShell }, () => {
+test('PowerShell manifest commands actually execute', { skip: !hasPowerShell || process.platform !== 'win32' }, () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'prune-windows-hook-'));
   try {
     const config = JSON.parse(fs.readFileSync(path.join(root, 'hooks/hooks.json'), 'utf8'));

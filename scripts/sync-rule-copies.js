@@ -60,7 +60,7 @@ for (const [relPath, frontmatter] of Object.entries(FRONTMATTER)) {
 // Generate the fallback too: skill-loading failures retain the same guarantees.
 const fallbackPath = path.join(root, 'hooks/prune-fallback.js');
 const fallback = '// Generated from AGENTS.md by scripts/sync-rule-copies.js.\nmodule.exports = ' + JSON.stringify(canonical) + ';\n';
-if (!fs.existsSync(fallbackPath) || fs.readFileSync(fallbackPath, 'utf8') !== fallback) {
+if (!fs.existsSync(fallbackPath) || read('hooks/prune-fallback.js') !== fallback) {
   if (check) { console.error('Prune fallback is out of sync'); drifted = true; }
   else fs.writeFileSync(fallbackPath, fallback);
 }
